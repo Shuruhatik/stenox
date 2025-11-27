@@ -1,6 +1,6 @@
 {
   "name": "stenox",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fast atomic file writer inspired by steno - 2-3x faster with the same reliability",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/node": "^24.10.1",
     "steno": "^4.0.2",
-    "stonex": "^0.1.3",
+    "stenox": "^0.1.3",
     "typescript": "^5.9.3"
   },
   "files": [

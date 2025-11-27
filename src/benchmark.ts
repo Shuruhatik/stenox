@@ -3,21 +3,21 @@ import { mkdtemp, writeFile } from 'fs/promises'
 import os from 'os'
 import path from 'path'
 import { Writer as StenoWriter } from 'steno'
-import { Writer as StonexWriter } from './index.js'
+import { Writer as StenoxWriter } from './index.js'
 
 async function benchmark(data: string, msg: string): Promise<void> {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'benchmark-'))
   
   const fsLabel = '  fs                    '
   const stenoLabel = '  steno                 '
-  const stonexLabel = '  stenox (local)        '
+  const stenoxLabel = '  stenox (local)        '
   
   const fsFile = path.join(dir, 'fs.txt')
   const stenoFile = path.join(dir, 'steno.txt')
-  const stonexFile = path.join(dir, 'stonex.txt')
+  const stenoxFile = path.join(dir, 'stenox.txt')
   
   const steno = new StenoWriter(stenoFile)
-  const stonex = new StonexWriter(stonexFile)
+  const stenox = new StenoxWriter(stenoxFile)
 
   console.log(msg)
   console.log()
@@ -36,25 +36,25 @@ async function benchmark(data: string, msg: string): Promise<void> {
   )
   console.timeEnd(stenoLabel)
 
-  // stonex - parallel writes
-  console.time(stonexLabel)
+  // stenox - parallel writes
+  console.time(stenoxLabel)
   await Promise.all(
-    [...Array(1000).keys()].map((_, i) => stonex.write(`${data}${i}`)),
+    [...Array(1000).keys()].map((_, i) => stenox.write(`${data}${i}`)),
   )
-  console.timeEnd(stonexLabel)
+  console.timeEnd(stenoxLabel)
 
   // Verify all files have the same final content
   const fsContent = readFileSync(fsFile, 'utf-8')
   const stenoContent = readFileSync(stenoFile, 'utf-8')
-  const stonexContent = readFileSync(stonexFile, 'utf-8')
+  const stenoxContent = readFileSync(stenoxFile, 'utf-8')
 
   console.log()
   console.log('  Verification:')
   console.log('    fs = steno                 ', fsContent === stenoContent ? '✓' : '✗')
-  console.log('    fs = stenox                ', fsContent === stonexContent ? '✓' : '✗')
+  console.log('    fs = stenox                ', fsContent === stenoxContent ? '✓' : '✗')
   console.log('    All writers match          ', 
     fsContent === stenoContent && 
-    fsContent === stonexContent ? '✓' : '✗')
+    fsContent === stenoxContent ? '✓' : '✗')
   console.log()
   console.log('─'.repeat(60))
   console.log()
@@ -64,13 +64,13 @@ async function benchmarkBurst(data: string, msg: string): Promise<void> {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'benchmark-'))
   
   const stenoLabel = '  steno                 '
-  const stonexLabel = '  stenox (local)        '
+  const stenoxLabel = '  stenox (local)        '
   
   const stenoFile = path.join(dir, 'steno.txt')
-  const stonexFile = path.join(dir, 'stonex.txt')
+  const stenoxFile = path.join(dir, 'stenox.txt')
   
   const steno = new StenoWriter(stenoFile)
-  const stonex = new StonexWriter(stonexFile)
+  const stenox = new StenoxWriter(stenoxFile)
 
   console.log(msg)
   console.log()
@@ -84,13 +84,13 @@ async function benchmarkBurst(data: string, msg: string): Promise<void> {
   await Promise.all(stenoPromises)
   console.timeEnd(stenoLabel)
 
-  console.time(stonexLabel)
-  const stonexPromises = []
+  console.time(stenoxLabel)
+  const stenoxPromises = []
   for (let i = 0; i < 10000; i++) {
-    stonexPromises.push(stonex.write(`${data}${i}`))
+    stenoxPromises.push(stenox.write(`${data}${i}`))
   }
-  await Promise.all(stonexPromises)
-  console.timeEnd(stonexLabel)
+  await Promise.all(stenoxPromises)
+  console.timeEnd(stenoxLabel)
 
   console.log()
   console.log('─'.repeat(60))
@@ -101,17 +101,17 @@ async function benchmarkSequential(data: string, msg: string): Promise<void> {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'benchmark-'))
   
   const stenoLabel = '  steno                 '
-  const stonexLabel = '  stenox (local)        '
+  const stenoxLabel = '  stenox (local)        '
   
   const stenoFile = path.join(dir, 'steno.txt')
-  const stonexFile = path.join(dir, 'stonex.txt')
+  const stenoxFile = path.join(dir, 'stenox.txt')
   
   const steno = new StenoWriter(stenoFile)
-  const stonex = new StonexWriter(stonexFile)
+  const stenox = new StenoxWriter(stenoxFile)
 
   // Warmup
   await steno.write('warmup')
-  await stonex.write('warmup')
+  await stenox.write('warmup')
 
   console.log(msg)
   console.log()
@@ -123,11 +123,11 @@ async function benchmarkSequential(data: string, msg: string): Promise<void> {
   }
   console.timeEnd(stenoLabel)
 
-  console.time(stonexLabel)
+  console.time(stenoxLabel)
   for (let i = 0; i < 100; i++) {
-    await stonex.write(`${data}${i}`)
+    await stenox.write(`${data}${i}`)
   }
-  console.timeEnd(stonexLabel)
+  console.timeEnd(stenoxLabel)
 
   console.log()
   console.log('─'.repeat(60))
