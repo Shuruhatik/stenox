@@ -1,6 +1,6 @@
 {
   "name": "stenox",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Fast atomic file writer inspired by steno - 2-3x faster with the same reliability",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,7 +27,15 @@
     "fast",
     "performance"
   ],
-  "author": "",
+  "author": "Shuruhatik",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shuruhatik/stenox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shuruhatik/stenox/issues"
+  },
+  "homepage": "https://github.com/Shuruhatik/stenox#readme",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
