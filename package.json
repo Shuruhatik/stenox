@@ -1,7 +1,7 @@
 {
   "name": "stenox",
   "version": "0.1.0",
-  "description": "Atomic file writer with write coalescing for safe concurrent file operations - faster than steno",
+  "description": "Fast atomic file writer inspired by steno - 2-3x faster with the same reliability",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -24,8 +24,8 @@
     "concurrent",
     "filesystem",
     "steno",
-    "stenox",
-    "fast"
+    "fast",
+    "performance"
   ],
   "author": "",
   "license": "MIT",
