@@ -158,11 +158,6 @@ async function run(): Promise<void> {
     '⚡ Burst: Write 100B data x 10000 (stress test)',
   )
 
-  await benchmarkSequential(
-    Buffer.alloc(10 * KB, 'x').toString(),
-    '🔄 Sequential: Write 10KB data x 100',
-  )
-
   console.log()
   console.log('Note: Results may vary due to OS caching and disk I/O.')
   console.log('Run multiple times for best comparison.')

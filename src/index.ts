@@ -21,46 +21,46 @@ export class Writer {
   #queued: Promise<void> | null = null
   #buffer: Content | null = null
 
-  #defer(content: Content): Promise<void> {
-    this.#buffer = content
-    if (!this.#queued) {
-      this.#queued = new Promise((done, fail) => {
-        this.#waiting = [done, fail]
-      })
-    }
-    return this.#queued
-  }
-
-  async #flush(content: Content): Promise<void> {
-    this.#active = true
-    try {
-      await writeFile(this.#tmp, content, 'utf-8')
-      await rename(this.#tmp, this.#target)
-      this.#current?.[0]()
-    } catch (err) {
-      if (err instanceof Error) {
-        this.#current?.[1](err)
-      }
-      throw err
-    } finally {
-      this.#active = false
-      this.#current = this.#waiting
-      this.#waiting = this.#queued = null
-      if (this.#buffer !== null) {
-        const next = this.#buffer
-        this.#buffer = null
-        await this.write(next)
-      }
-    }
-  }
-
   constructor(file: PathLike) {
     this.#target = file
     this.#tmp = temp(file)
   }
 
   async write(content: Content): Promise<void> {
-    return this.#active ? this.#defer(content) : this.#flush(content)
+    if (!this.#active) {
+      this.#active = true
+
+      try {
+        await writeFile(this.#tmp, content, 'utf-8')
+        await rename(this.#tmp, this.#target)
+        const c = this.#current
+        if (c) c[0]()
+      } catch (err) {
+        const c = this.#current
+        if (c && err instanceof Error) c[1](err)
+        throw err
+      } finally {
+        this.#active = false
+        this.#current = this.#waiting
+        this.#waiting = null
+        this.#queued = null
+        
+        const next = this.#buffer
+        if (next) {
+          this.#buffer = null
+          await this.write(next)
+        }
+      }
+      return
+    }
+
+    this.#buffer = content
+    if (!this.#queued) {
+      this.#queued = new Promise((d, f) => {
+        this.#waiting = [d, f]
+      })
+    }
+    return this.#queued
   }
 
   get path(): PathLike {
