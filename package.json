@@ -1,6 +1,6 @@
 {
   "name": "stenox",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fast atomic file writer inspired by steno - 2-3x faster with the same reliability",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
