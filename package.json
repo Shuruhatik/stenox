@@ -1,6 +1,6 @@
 {
   "name": "writerx",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Fast atomic file writer inspired by steno - 2-3x faster with the same reliability",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
