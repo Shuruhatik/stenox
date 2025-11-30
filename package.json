@@ -1,16 +1,9 @@
 {
   "name": "writerx",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Fast atomic file writer inspired by steno - 2-3x faster with the same reliability",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "scripts": {
     "build": "tsc",
     "benchmark": "npm run build && node dist/benchmark.js",
@@ -42,7 +35,6 @@
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "steno": "^4.0.2",
     "typescript": "^5.9.3"
   },
   "files": [

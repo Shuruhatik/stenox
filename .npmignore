@@ -5,3 +5,4 @@ tsconfig.json
 *.tmp
 .DS_Store
 node_modules/
+benchmark.*
